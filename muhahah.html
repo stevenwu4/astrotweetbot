@@ -1,0 +1,423 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+	<head><script type="text/javascript">(window.NREUM||(NREUM={})).loader_config={xpid:"UQEFWVFWGwEFXVVWAQY="};window.NREUM||(NREUM={}),__nr_require=function a(b,c,d){function e(f){if(!c[f]){var g=c[f]={exports:{}};b[f][0].call(g.exports,function(a){var c=b[f][1][a];return e(c?c:a)},g,g.exports,a,b,c,d)}return c[f].exports}for(var f=0;f<d.length;f++)e(d[f]);return e}({1:[function(a,b){function c(a,b,c){c||(c={});for(var d=f[a],e=d&&d.length||0,h=c[g]||(c[g]={}),i=0;e>i;i++)d[i].apply(h,b);return h}function d(a,b){var c=f[a]||(f[a]=[]);c.push(b)}function e(a){return delete a[g]}var f={},g="nr@context";b.exports={on:d,emit:c,clear:e}},{}],2:[function(a){function b(a,b,e,g,i){return h?h-=1:c("err",[i||new UncaughtException(a,b,e)]),"function"==typeof f?f.apply(this,d(arguments)):!1}function UncaughtException(a,b,c){this.message=a||"Uncaught error with no additional information",this.sourceURL=b,this.line=c}var c=a("handle"),d=a("lodash._slice"),e=a("../../../contextual-ee"),f=window.onerror,g=!1,h=0;a("loader").features.push("err"),window.onerror=b;try{throw new Error}catch(i){"stack"in i&&(a("../../wrap-timer"),a("../../wrap-raf"),"addEventListener"in window&&a("../../wrap-events"),window.XMLHttpRequest&&XMLHttpRequest.prototype&&XMLHttpRequest.prototype.addEventListener&&a("../../wrap-xhr"),g=!0)}e.on("fn-start",function(){g&&(h+=1)}),e.on("fn-err",function(a,b,d){g&&(this.thrown=!0,c("err",[d,(new Date).getTime()]))}),e.on("fn-end",function(){g&&!this.thrown&&h>0&&(h-=1)})},{"../../../contextual-ee":1,"../../wrap-events":3,"../../wrap-raf":4,"../../wrap-timer":5,"../../wrap-xhr":6,handle:"4O2Y62",loader:"YLUGVp","lodash._slice":14}],3:[function(a){function b(a){d.inPlace(a,["addEventListener","removeEventListener"],"-",c)}function c(a){return a[1]}var d=a("../wrap-function"),e=(a("lodash._slice"),a("../contextual-ee"));if(b(window),"getPrototypeOf"in Object){for(var f=document;f&&!f.hasOwnProperty("addEventListener");)f=Object.getPrototypeOf(f);f&&b(f);for(var g=XMLHttpRequest.prototype;g&&!g.hasOwnProperty("addEventListener");)g=Object.getPrototypeOf(g);g&&b(g)}else XMLHttpRequest.prototype.hasOwnProperty("addEventListener")&&b(XMLHttpRequest.prototype);e.on("addEventListener-start",function(a){if(a[1]){var b=a[1];"function"==typeof b?this.wrapped=b["nr@wrapped"]?a[1]=b["nr@wrapped"]:b["nr@wrapped"]=a[1]=d(b,"fn-"):"function"==typeof b.handleEvent&&d.inPlace(b,["handleEvent"],"fn-")}}),e.on("removeEventListener-start",function(a){var b=this.wrapped;b&&(a[1]=b)})},{"../contextual-ee":1,"../wrap-function":15,"lodash._slice":14}],4:[function(a){var b=(a("lodash._slice"),a("../wrap-function")),c=a("../contextual-ee");b.inPlace(window,["requestAnimationFrame","mozRequestAnimationFrame","webkitRequestAnimationFrame","msRequestAnimationFrame"],"raf-"),c.on("raf-start",function(a){a[0]=b(a[0],"fn-")})},{"../contextual-ee":1,"../wrap-function":15,"lodash._slice":14}],5:[function(a){function b(a){var b=a[0];"string"==typeof b&&(b=new Function(b)),a[0]=c(b,"fn-")}var c=(a("lodash._slice"),a("../wrap-function")),d=a("../contextual-ee");c.inPlace(window,["setTimeout","setInterval","setImmediate"],"setTimer-"),d.on("setTimer-start",b)},{"../contextual-ee":1,"../wrap-function":15,"lodash._slice":14}],6:[function(a){function b(){c.inPlace(this,f,"fn-")}var c=a("../wrap-function"),d=a("../contextual-ee"),e=window.XMLHttpRequest,f=["onload","onerror","onabort","onloadstart","onloadend","onprogress","onreadystatechange","ontimeout"];window.XMLHttpRequest=function(a){var f=new e(a);return d.emit("new-xhr",[],f),c.inPlace(f,["addEventListener","removeEventListener"],"-",function(a,b){return b}),f.addEventListener("readystatechange",b,!1),f},window.XMLHttpRequest.prototype=e.prototype},{"../contextual-ee":1,"../wrap-function":15}],7:[function(a){function b(a){var b=this.params,c=this.metrics;if(!this.ended){this.ended=!0;for(var d=0;j>d;d++)a.removeEventListener(i[d],this.listener,!1);if(!b.aborted){if(c.duration=(new Date).getTime()-this.startTime,4===a.readyState){if(b.status=a.status,a.responseText&&a.responseText.length&&(c.rxSize=a.responseText.length),this.sameOrigin){var f=a.getResponseHeader("X-NewRelic-App-Data");f&&(b.cat=f.split(", ").pop())}}else b.status=0;c.cbTime=this.cbTime,e("xhr",[b,c])}}}function c(a,b){var c=f(b),d=a.params;d.host=c.hostname+":"+c.port,d.pathname=c.pathname,a.sameOrigin=c.sameOrigin}function d(a,b){return b}if(window.XMLHttpRequest&&XMLHttpRequest.prototype&&XMLHttpRequest.prototype.addEventListener&&!/CriOS/.test(navigator.userAgent)){a("loader").features.push("xhr");var e=a("handle"),f=a("./parse-url.js"),g=a("../../../wrap-function"),h=a("../../../contextual-ee"),i=["load","error","abort","timeout"],j=i.length,k=a("../../../loader/id");a("../../wrap-events"),a("../../wrap-xhr"),h.on("new-xhr",function(){this.totalCbs=0,this.called=0,this.cbTime=0,this.end=b,this.ended=!1,this.xhrGuids={}}),g.inPlace(XMLHttpRequest.prototype,["open","send"],"-xhr-",d),h.on("open-xhr-start",function(a){this.params={method:a[0]},c(this,a[1]),this.metrics={}}),h.on("open-xhr-end",function(a,b){"loader_config"in NREUM&&"xpid"in NREUM.loader_config&&this.sameOrigin&&b.setRequestHeader("X-NewRelic-ID",NREUM.loader_config.xpid)}),h.on("send-xhr-start",function(a,b){var c=this.metrics,d=a[0],e=this;c&&d&&d.length&&(c.txSize=d.length),this.startTime=(new Date).getTime(),this.listener=function(a){"abort"===a.type&&(e.params.aborted=!0),("load"!==a.type||e.called===e.totalCbs&&(e.onloadCalled||"function"!=typeof b.onload))&&e.end(b)};for(var f=0;j>f;f++)b.addEventListener(i[f],this.listener,!1)}),h.on("xhr-cb-time",function(a,b,c){this.cbTime+=a,b?this.onloadCalled=!0:this.called+=1,this.called!==this.totalCbs||!this.onloadCalled&&"function"==typeof c.onload||this.end(c)}),h.on("xhr-load-added",function(a,b){var c=""+k(a)+!!b;this.xhrGuids&&!this.xhrGuids[c]&&(this.xhrGuids[c]=!0,this.totalCbs+=1)}),h.on("xhr-load-removed",function(a,b){var c=""+k(a)+!!b;this.xhrGuids&&this.xhrGuids[c]&&(delete this.xhrGuids[c],this.totalCbs-=1)}),h.on("addEventListener-end",function(a,b){b instanceof XMLHttpRequest&&"load"===a[0]&&h.emit("xhr-load-added",[a[1],a[2]],b)}),h.on("removeEventListener-end",function(a,b){b instanceof XMLHttpRequest&&"load"===a[0]&&h.emit("xhr-load-removed",[a[1],a[2]],b)}),h.on("fn-start",function(a,b,c){b instanceof XMLHttpRequest&&("onload"===c&&(this.onload=!0),("load"===(a[0]&&a[0].type)||this.onload)&&(this.xhrCbStart=(new Date).getTime()))}),h.on("fn-end",function(a,b){this.xhrCbStart&&h.emit("xhr-cb-time",[(new Date).getTime()-this.xhrCbStart,this.onload,b],b)})}},{"../../../contextual-ee":1,"../../../loader/id":11,"../../../wrap-function":15,"../../wrap-events":3,"../../wrap-xhr":6,"./parse-url.js":8,handle:"4O2Y62",loader:"YLUGVp"}],8:[function(a,b){b.exports=function(a){var b=document.createElement("a"),c=window.location,d={};b.href=a,d.port=b.port;var e=b.href.split("://");return!d.port&&e[1]&&(d.port=e[1].split("/")[0].split(":")[1]),d.port&&"0"!==d.port||(d.port="https"===e[0]?"443":"80"),d.hostname=b.hostname||c.hostname,d.pathname=b.pathname,"/"!==d.pathname.charAt(0)&&(d.pathname="/"+d.pathname),d.sameOrigin=!b.hostname||b.hostname===document.domain&&b.port===c.port&&b.protocol===c.protocol,d}},{}],handle:[function(a,b){b.exports=a("4O2Y62")},{}],"4O2Y62":[function(a,b){function c(a,b){var c=d[a];return c?c.apply(this,b):(e[a]||(e[a]=[]),void e[a].push(b))}var d={},e={};b.exports=c,c.queues=e,c.handlers=d},{}],11:[function(a,b){function c(a){if(!a||"object"!=typeof a&&"function"!=typeof a)return-1;if(a===window)return 0;if(e.call(a,"__nr"))return a.__nr;try{return Object.defineProperty(a,"__nr",{value:d,writable:!0,enumerable:!1}),d}catch(b){return a.__nr=d,d}finally{d+=1}}var d=1,e=Object.prototype.hasOwnProperty;b.exports=c},{}],loader:[function(a,b){b.exports=a("YLUGVp")},{}],YLUGVp:[function(a,b){function c(){var a=m.info=NREUM.info;if(a&&a.agent&&a.licenseKey&&a.applicationID){m.proto="https"===l.split(":")[0]||a.sslForHttp?"https://":"http://",g("mark",["onload",f()]);var b=i.createElement("script");b.src=m.proto+a.agent,i.body.appendChild(b)}}function d(){"complete"===i.readyState&&e()}function e(){g("mark",["domContent",f()])}function f(){return(new Date).getTime()}var g=a("handle"),h=window,i=h.document,j="addEventListener",k="attachEvent",l=(""+location).split("?")[0],m=b.exports={offset:f(),origin:l,features:[]};i[j]?(i[j]("DOMContentLoaded",e,!1),h[j]("load",c,!1)):(i[k]("onreadystatechange",d),h[k]("onload",c)),g("mark",["firstbyte",f()])},{handle:"4O2Y62"}],14:[function(a,b){function c(a,b,c){b||(b=0),"undefined"==typeof c&&(c=a?a.length:0);for(var d=-1,e=c-b||0,f=Array(0>e?0:e);++d<e;)f[d]=a[b+d];return f}b.exports=c},{}],15:[function(a,b){function c(a,b,c,d){function nrWrapper(){var g,h=f(arguments),i=this,j=c&&c(h,i)||{};try{e.emit(b+"start",[h,i,d],j)}catch(k){}try{return g=a.apply(i,h)}catch(l){throw e.emit(b+"err",[h,i,l],j),l}finally{try{e.emit(b+"end",[h,i,g],j)}catch(k){}}}return a&&"function"==typeof a&&a.apply&&!a._wrapped?(b||(b=""),nrWrapper._wrapped=!0,nrWrapper):a}function d(a,b,d,e){d||(d="");var f,g,h,i="-"===d.charAt(0);for(h=0;h<b.length;h++)g=b[h],f=a[g],f&&"function"==typeof f&&f.apply&&!f._wrapped&&(a[g]=c(f,i?g+d:d,e,g,a))}var e=a("../contextual-ee"),f=a("lodash._slice");b.exports=c,c.inPlace=d},{"../contextual-ee":1,"lodash._slice":14}]},{},["YLUGVp",2,7]);</script>
+		<script type="text/javascript" src="ImagePop.js"></script>
+
+
+		<title>Tonight's Sky Primary Object Selection</title>
+		<style type='text/css'>
+			body {
+				background-image: url('M8.jpg');
+				background-repeat: repeat-y;
+				background-position: center center;
+			}
+		</style>
+		<link rel=StyleSheet HREF="ts.css" type="text/css">
+	</head>
+
+<body bgcolor="#000000" text="#FFFFFF" link="#FFFF66" vlink="#FFFF11">
+
+		<!-- script type="text/javascript" src="http://casazza.net/JavaScript/LaserMouse.js"></script -->
+
+<table border="0" cellspacing="0" cellpadding="0" width='100%'>
+	<tr>
+	    <td align="center" colspan="3">		
+<!--			<span class="head2">	This site is Beta testing.  Feel free to <a name="Site Comments" id="comment" href="Comments.php">report</a> any problems. 	</span>
+-->
+		</td>
+	</tr>
+	<tr>
+		<td width="180">
+			&nbsp;
+		</td>
+	    <td align="center">
+			<span class="head1">Tonight's Sky</span>
+		</td>
+		<td align="right" width="180">
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                <input type="hidden" name="cmd" value="_s-xclick">
+                <input type="hidden" name="hosted_button_id" value="6ZLR4NXUDSSN2">
+                <input type="image" src="support1.png" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+            </form>
+		</td>
+	</tr>
+	<tr>
+	    <td align="center" colspan="3">		
+			<span class="head2">	Helping the amateur astronomer plan their night by showing what you can see and what it will look like.	</span>	
+		</td>
+	</tr>
+</table>
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+	<tr>
+<!--	<td align="left">
+			<img src='images/m13-s.jpg' alt='M13'>		</td>
+-->
+		<td align="center">
+<script type='text/javascript'>
+<!--
+	google_ad_client = "pub-4877069197855371";
+	google_ad_width = 728;
+	google_ad_height = 90;
+	google_ad_format = "728x90_as";
+	google_ad_type = "text";
+	google_ad_channel ="2116004185";
+	google_color_border = "000000";
+	google_color_bg = "000000";
+	google_color_link = "FFFFFF";
+	google_color_url = "FF6600";
+	google_color_text = "ffff00";
+//-->
+</script>
+<script type='text/javascript' src='http://pagead2.googlesyndication.com/pagead/show_ads.js'>
+</script>
+		</td>
+<!--	<td align="right">
+			<img src='images/NGC224-s.jpg' alt='M31'>		</td>
+-->
+	</tr>
+</table>
+<hr size="5" style="color:#ffcc33;">
+<form name="Form1" action="Plan.php" method="post" onSubmit="return CheckForm()">
+<input type=hidden name='Latitude' value='41.1'>
+<input type=hidden name='Longitude' value='-75.8'>
+<input type=hidden name='TimeZone' value='-4'>
+<input type=hidden name='Start' value='20'>
+<input type=hidden name='Len' value='4'>
+<input type=hidden name='Date' value='4/12/2014'>
+<input type=hidden name='Horizon' value='45'>
+<table border=0>
+	<tr>
+		<td colspan=10>
+			<span class="instruct">
+				This is a list of up to 10 objects that meet your criteria.  Use the buttons to research each item, check off the ones you plan to observe, then press the "Generate Observing Plan" button at the bottom of the page to produce a plan for your session.<br>
+<br>
+The list of objects below has been prepared based on your Latitude of 41.1 and Longitude of -75.8.  These objects will be above your horizon of 45&deg; on 4/12/2014 starting at 20:00 and for 4 hours.
+			</span>
+		<hr>
+		</td>
+	</tr>
+	<tr>
+		<td nowrap>Select<br>
+			<input type="checkbox" name="AllObs" value="1" onclick="SetAll();">All
+		</td> <!-- 1 -->
+		<td>Primary<br>Catalog</td> <!-- 2 -->
+		<td>Secondary<br>Catalog</td> <!-- 3 -->
+		<td nowrap>Object Type and<br>Dreyer's Descriptions</td> <!-- 4 -->
+		<td nowrap>Mag.</td> <!-- 5 -->
+		<td nowrap>Estimated<br>Distance</td> <!-- 6 -->
+		<td nowrap>Size<br>Separation</td> <!-- 7 -->
+		<td nowrap>Const.</td> <!-- 8 -->
+		<td nowrap>Research Info</td> <!-- 9 -->
+		<td nowrap>Sample</td> <!-- 10 -->
+	</tr>
+	<tr>
+		<td colspan=10>
+			<hr>
+		</td>
+	</tr>
+<!-- SSO Objects -->
+	<tr>
+		<td nowrap> <!-- 1 -->
+			<input type="checkbox" name="SSOID61632778" value="1">
+		</td>
+		<td nowrap> <!-- 2 -->
+			Jupiter		</td>
+		<td nowrap> <!-- 3 -->
+		</td>
+
+		<td nowrap> <!-- 4 -->
+Planet		</td>
+		<td nowrap> <!-- 5 -->
+-2.13		</td>
+		<td nowrap> <!-- 6 -->
+		</td>
+		<td nowrap> <!-- 7 -->
+		</td>
+		<td nowrap> <!-- 8 -->
+						<span class="fakelink">
+				<a name="Check it out!" id="Check_it_out0" onClick="javascript:PopUp('http://dibonsmith.com/gem_con.htm')">Gem</a>
+			</span>
+			<span class="fakelink">
+				<img src="const.gif" alt="Click to see the const" name="Const" width="30" height="10" border="0" onClick="javascript:PopImage('http://dibonsmith.com/gem_con.gif','Title')">
+			</span>
+
+		</td>
+		<td nowrap> <!-- 9 -->
+			<a name="Research" href="Research.php?SSOID=61632778" target="_blank">
+				<img src="r1.png" alt="Research the object." border="0" onMouseOver="this.src='r2.png'" onMouseOut="this.src='r1.png'">
+			</a>
+		</td>
+
+		<td nowrap > <!-- 10 -->
+		</td>
+	</tr>
+	<tr>
+		<td colspan=10> <!-- 1 -->
+<hr>		</td>
+	</tr>
+
+<!-- Now DSO Objects -->
+	<tr>
+		<td nowrap> <!-- 1 -->
+			<input type="checkbox" name="DSOID251" value="1">
+		</td>
+		<td nowrap> <!-- 2 -->
+			NGC2632		</td>
+		<td nowrap> <!-- 3 -->
+			M44		</td>
+
+		<td nowrap> <!-- 4 -->
+Open Cluster		</td>
+		<td nowrap> <!-- 5 -->
+3.1		</td>
+		<td nowrap> <!-- 6 -->
+			577 ly		</td>
+		<td nowrap> <!-- 7 -->
+			70.00		</td>
+		<td nowrap> <!-- 8 -->
+						<span class="fakelink">
+				<a name="Check it out!" id="Check_it_out2" onClick="javascript:PopUp('http://dibonsmith.com/cnc_con.htm')">Cnc</a>
+			</span>
+		</td>
+		<td nowrap> <!-- 9 -->
+			<a name="Research" href="Research.php?DSOID=251" target="_blank">
+				<img src="r1.png" alt="Research the object." border="0" onMouseOver="this.src='r2.png'" onMouseOut="this.src='r1.png'">
+			</a>
+	<!--		<input type="image" value="Research" onClick="javascript:PopUp('Research.php?DSOID=251')" src="r1.png" onmouseover="this.src='r2.png'" onmouseout="this.src='r1.png'">  -->
+		</td>
+
+		<td nowrap rowspan=2> <!-- 10 -->
+&nbsp;		</td>
+	</tr>
+	<tr>
+		<td> <!-- 1 -->
+			&nbsp;
+		</td>
+		<td colspan= 2> <!-- 2&3 (or 4) -->
+			Beehive Cluster		</td>
+		<td colspan=4> <!-- 4-7 or 3-6 -->
+<!--  This is ready for the description decoder		
+			<span class="fakelink">
+				<a name="Check it out!" id="Check it out!" onClick="javascript:PopUp('ExplainDesc.php?DSOID=251')">Praesepe; = M44</a>
+			</span>
+-->
+			Praesepe; = M44		</td>
+  <!-- 7 (DS) -->
+		<td> <!-- 8 -->
+			<span class="fakelink">
+				<img src="const.gif" alt="Click to see the const" name="Const" width="30" height="10" border="0" onClick="javascript:PopImage('http://dibonsmith.com/cnc_con.gif','Title')">
+			</span>
+		</td>
+		<td> <!-- 9 -->
+			&nbsp;
+		</td>	
+	</tr>
+	<tr>
+		<td colspan=10> <!-- 1 -->
+			<hr>
+		</td>
+	</tr>
+	<tr>
+		<td nowrap> <!-- 1 -->
+			<input type="checkbox" name="DSOID180" value="1">
+		</td>
+		<td nowrap> <!-- 2 -->
+			NGC2264		</td>
+		<td nowrap> <!-- 3 -->
+					</td>
+
+		<td nowrap> <!-- 4 -->
+Open Cluster		</td>
+		<td nowrap> <!-- 5 -->
+4.1		</td>
+		<td nowrap> <!-- 6 -->
+					</td>
+		<td nowrap> <!-- 7 -->
+			40.00		</td>
+		<td nowrap> <!-- 8 -->
+						<span class="fakelink">
+				<a name="Check it out!" id="Check_it_out6" onClick="javascript:PopUp('http://dibonsmith.com/mon_con.htm')">Mon</a>
+			</span>
+		</td>
+		<td nowrap> <!-- 9 -->
+			<a name="Research" href="Research.php?DSOID=180" target="_blank">
+				<img src="r1.png" alt="Research the object." border="0" onMouseOver="this.src='r2.png'" onMouseOut="this.src='r1.png'">
+			</a>
+	<!--		<input type="image" value="Research" onClick="javascript:PopUp('Research.php?DSOID=180')" src="r1.png" onmouseover="this.src='r2.png'" onmouseout="this.src='r1.png'">  -->
+		</td>
+
+		<td nowrap rowspan=2> <!-- 10 -->
+&nbsp;		</td>
+	</tr>
+	<tr>
+		<td> <!-- 1 -->
+			&nbsp;
+		</td>
+		<td colspan= 2> <!-- 2&3 (or 4) -->
+			Christmas Tree Cluster, Cone Nebula		</td>
+		<td colspan=4> <!-- 4-7 or 3-6 -->
+<!--  This is ready for the description decoder		
+			<span class="fakelink">
+				<a name="Check it out!" id="Check it out!" onClick="javascript:PopUp('ExplainDesc.php?DSOID=180')">eL neb, 3deg  diam, densest 1</a>
+			</span>
+-->
+			eL neb, 3deg  diam, densest 1		</td>
+  <!-- 7 (DS) -->
+		<td> <!-- 8 -->
+			<span class="fakelink">
+				<img src="const.gif" alt="Click to see the const" name="Const" width="30" height="10" border="0" onClick="javascript:PopImage('http://dibonsmith.com/mon_con.gif','Title')">
+			</span>
+		</td>
+		<td> <!-- 9 -->
+			&nbsp;
+		</td>	
+	</tr>
+	<tr>
+		<td colspan=10> <!-- 1 -->
+			<hr>
+		</td>
+	</tr>
+
+</table>
+<table>
+	<tr>
+		<td>
+			<table>
+				<tr>
+					<td>
+						Plan Format:
+					</td>
+					<td>
+						 <select name="Format">
+							<option value="Default" selected>Default Plan</option>
+							<option value="AltAz" >Include Alt/Az over time</option>
+							<option value="Compact" >Compact Plan</option>
+							<option value="Export" >CSV Export</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Sort by:
+					</td>
+					<td>
+						<select name="SortBy">
+							<option value="Difficulty,Magnitude" selected>Difficulty</option>
+							<option value="RA" >RA: Rise Time</option>
+							<option value="Const,Magnitude" >Constellation</option>
+						</select>
+						&nbsp;&nbsp;White Background: <input type="checkbox" name="Rev" value="1">
+					</td>
+				</tr>
+				<tr>
+					<td colspan='2'>
+						<input type="image" name="Submit" src="gop1.png" onmouseover="this.src='gop2.png'" onmouseout="this.src='gop1.png'">
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<script type="text/javascript"><!--
+			google_ad_client = "pub-4877069197855371";
+			google_ad_width = 468;
+			google_ad_height = 15;
+			google_ad_format = "468x15_0ads_al_s";
+			google_ad_channel ="2116004185";
+			google_color_border = "003366";
+			google_color_bg = "000000";
+			google_color_link = "FFFFFF";
+			google_color_url = "FF6600";
+			google_color_text = "FFFF00";
+			//--></script>
+			<script type="text/javascript"
+			  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+			</script>
+		</td>
+	</tr>
+</table>
+</form>
+
+		<script type="text/javascript">
+		function SetAll()
+		{
+document.Form1.DSOID251.checked=1;document.Form1.DSOID180.checked=1;document.Form1.SSOID61632778.checked=1;			document.Form1.AllObs.checked=0;
+		   	return;
+		}
+
+		function CheckForm()
+		{
+			if(
+!document.Form1.DSOID251.checked && !document.Form1.DSOID180.checked && !document.Form1.SSOID61632778.checked && 			1==1)
+			{
+				alert("You have not selected any objects for your plan.");
+			   	return false;
+			}
+		}
+		</script>
+			<hr size="5" style="color:#ffcc33;">
+<table border="0" cellspacing="0" align="center">
+	<tr>
+	   	<td nowrap><a name="My Home Page" id="My_Home_page" href="http://casazza.net/">My Home Page</a></td>
+		<td width=20></td>
+    	<td nowrap><a name="Privacy" id="Privacy_Page" href="http://casazza.net/privacy.html">Privacy</a></td>
+		<td width=20></td>
+	    <td nowrap><a name="AstroHelper" id="AstroHelper" href="http://casazza.net/astrohelper/">AstroHelper</a></td>
+		<td width=20></td>
+	    <td nowrap><a name="Clear Sky Alarm Clock" id="csac" href="http://ClearSkyAlarmClock.com">Clear Sky Alarm Clock</a></td>
+		<td width=20></td>
+	    <td nowrap><a name="Referers_WebRings" id="Referers_WebRings" href="Referers.php">Referrers and Web Rings</a></td>
+		<td width=20></td>
+	    <td nowrap><a name="Site Comments" id="xcomment" href="Comments.php">Site Comments</a></td>
+	</tr>
+</table>
+<table>
+	<tr>
+    	<td colspan=11>
+			<span class=copy> Copyright &copy; 2014 <a name="mcc" id="mcc" href="http://casazza.net/mcc">Mark Casazza Consulting</a> All rights reserved.</span>
+		</td>
+	</tr>
+</table>
+<table border="0" cellspacing="0">
+	<tr>
+		<td>
+			<a href="http://jigsaw.w3.org/css-validator/">
+				<img src="vcss.gif" alt="Valid CSS!"  width="88" height="31" border="0">
+			</a>
+		</td>
+		<td width=10></td>
+		<td>
+			<a href="http://validator.w3.org/check/referer">
+				<img src="valid-html401.gif" alt="Valid HTML 4.01!" width="88" height="31" border="0">
+			</a>
+
+		</td>
+		<td width=10></td>
+		<td>
+			<span class="tiny">
+				This website is best viewed with Internet Explorer 6 or FireFox 1 with a resolution of 800 X 600 better.  Other browsers should work but have not been tested.  Higher resolutions will provide a better browsing experience.
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="5">
+			<span class="tiny">
+				Buttons provided by 
+			</span>
+			<A HREF="http://www.buttongenerator.com/">
+				<IMG SRC="http://www.buttongenerator.com/ima/link.gif" WIDTH=88 HEIGHT=31 BORDER=0 ALT="ButtonGenerator.com">
+			</A>
+			&nbsp;&nbsp;&nbsp;<span class="tiny">Background provide by <a href="http://www.heavenlyview.com/">Alan Chen</a>.</span>
+		</td>
+	</tr>
+</table>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-1073012-4";
+urchinTracker();
+</script>
+<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"beacon-2.newrelic.com","licenseKey":"b0acb847b9","applicationID":"2594467","transactionName":"ZAFSMUBXX0BUAkMMC11LZRdbGXNaUi1eFhAdFFgV","queueTime":0,"applicationTime":1085,"ttGuid":"","agentToken":"","userAttributes":"","errorBeacon":"jserror.newrelic.com","agent":"js-agent.newrelic.com\/nr-356.min.js"}</script></body>
+</html>
