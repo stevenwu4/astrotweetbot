@@ -50,7 +50,6 @@ url = "http://tonightssky.com/BigList.php"
 
 b = [x.strip() for x in a.split(' ')]
 b = [x for x in b if x != '']
-print b
 b = [x.split("\t") for x in b]
 values = dict(b)
 
@@ -60,7 +59,21 @@ response = urllib2.urlopen(req)
 html_result = response.read()
 soup = BeautifulSoup(html_result)
 a = soup.find_all('table', border=0)
-print a[2]
+a = a[2]
+b = a.find_all('hr')
+# a = a.find_all('td')
+print(repr(b))
+
+
+c = b[2].find_next()
+print c
+print('='*20)
+if len(c.find_next_siblings('tr')) == 5:
+    print c.find_next_siblings('tr')[2]
+print('='*20)
+print repr(c.find_next('tr'))
+print "block"*20
+
 # file = open('muhahah.html', 'w')
 # file.write(response.read())
 
