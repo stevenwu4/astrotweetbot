@@ -59,7 +59,8 @@ req = urllib2.Request(url, form_data)
 response = urllib2.urlopen(req)
 html_result = response.read()
 soup = BeautifulSoup(html_result)
-print soup.find('table', border=0)
+a = soup.find_all('table', border=0)
+print a[2]
 # file = open('muhahah.html', 'w')
 # file.write(response.read())
 
