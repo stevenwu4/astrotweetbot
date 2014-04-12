@@ -1,24 +1,125 @@
+"""
+Usage:
+    parser.py parser (--filename=<filename>)
+    parser.py get_html_page (--filename=<filename)
+"""
+
+from docopt import docopt
 from bs4 import BeautifulSoup, SoupStrainer
 import json
-import requests
+import urllib, urllib2
+
 
 TONIGHTSSKY_URL = 'http://tonightssky.com/BigList.php'
 
+#http://dibonsmith.com/constel.htm
+#Acronyms taken from clicking the constellation & finding it in url
+CONSTELLATION_MAPPING = {
+    'And': 'Andromeda',
+    'Ant': 'Antlia',
+    'Aps': 'Apus',
+    'Aqr': 'Aquarius',
+    'Aql': 'Aquila',
+    'Ara': 'Ara',
+    'Ari': 'Aries',
+    'Aur': 'Auriga',
+    'Boo': 'Boötes',
+    : 'Caelum',
+    : 'Camelopardalis',
+    : 'Cancer',
+    : 'Canes Venatici',
+    : 'Canis Major',
+    : 'Canis Minor',
+    : 'Capricornus',
+    : 'Carina',
+    : 'Cassiopeia',
+    : 'Centaurus',
+    : 'Cepheus',
+    : 'Cetus',
+    : 'Chamaeleon',
+    : 'Circinus',
+    : 'Columba',
+    : 'Coma Berenices',
+    : 'Corona Australis',
+    : 'Corona Borealis',
+    : 'Corvus',
+    : 'Crater',
+    : 'Crux',
+    : 'Cygnus',
+    : 'Delphinus',
+    : 'Dorado',
+    : 'Draco',
+    : 'Equuleus',
+    : 'Eridanus',
+    : 'Fornax',
+    : 'Gemini',
+    : 'Grus',
+    : 'Hercules',
+    : 'Horologium',
+    : 'Hydra',
+    : 'Hydrus',
+    : 'Indus',
+    : 'Lacerta',
+    : 'Leo',
+    : 'Leo Minor',
+    : 'Lepus',
+    : 'Libra',
+    : 'Lupus',
+    : 'Lynx',
+    : 'Lyra',
+    : 'Mensa',
+    : 'Microscopium',
+    : 'Monoceros',
+    : 'Musca',
+    : 'Norma',
+    : 'Octans',
+    : 'Ophiuchus',
+    : 'Orion',
+    : 'Pavo',
+    : 'Pegasus',
+    : 'Perseus',
+    : 'Phoenix',
+    : 'Pictor',
+    : 'Pisces',
+    : 'Piscis Austrinus',
+    : 'Puppis',
+    : 'Pyxis',
+    : 'Reticulum',
+    : 'Sagitta',
+    : 'Sagittarius',
+    : 'Scorpius',
+    : 'Sculptor',
+    : 'Scutum',
+    : 'Serpens',
+    : 'Sextans',
+    : 'Taurus',
+    : 'Telescopium',
+    : 'Triangulum',
+    : 'Triangulum Australe',
+    : 'Tucana',
+    : 'Ursa Major',
+    : 'Ursa Minor',
+    : 'Vela',
+    : 'Virgo',
+    : 'Volans',
+    : 'Vulpecula',
+}
 
-def get_html_page():
-    payload = {
+
+def get_html_page(name_of_html):
+    payload = urllib.urlencode({
         'Asteroids': '1',
         'Comets': '1',
         'Conutine.x': '146',
         'Conutine.y': '17',
-        'Date': '4/12/2014',
+        'Date': '12/14/2013',
         'Doubles': '1',
         'Galaxies': '1',
         'Globs': '1',
         'Horizon': '45',
-        'Latitude': '41.1',
+        'Latitude': '49.1',
         'Len': '4',
-        'Longitude': '-75.8',
+        'Longitude': '-78.8',
         'NE': '1',
         'Nebula': '1',
         'OpenCl': '1',
@@ -26,10 +127,14 @@ def get_html_page():
         'StarGrp': '1',
         'Start': '20',
         'TimeZone': 'b-4'
-    }
-    response = requests.post(TONIGHTSSKY_URL, params=payload)
-    destination_html = open('blah.html', 'w')
-    destination_html.write(response.read())
+    })
+
+    request = urllib2.Request(TONIGHTSSKY_URL, payload)
+    response = urllib2.urlopen(request)
+    html_result = response.read()
+
+    destination_html = open(name_of_html, 'w')
+    destination_html.write(html_result)
 
 
 def scrape_html(html):
@@ -89,7 +194,7 @@ def scrape_html(html):
             pass
         primary_catalog = all_cells_in_row[1].text.strip()
         object_desc = all_cells_in_row[3].text.strip()
-        magnitude = all_cells_in_next_row[4].text.strip()
+        magnitude = all_cells_in_row[4].text.strip()
         constellation = all_cells_in_row[7].text.strip()
 
         if next_row_is_pair:
@@ -104,7 +209,7 @@ def scrape_html(html):
         row_header_mapping = {
             'primary_catalog': primary_catalog,
             'object_description': object_desc,
-            'magnitude': magnitude
+            'magnitude': magnitude,
             'constellation': constellation,
         }
 
@@ -119,4 +224,14 @@ def scrape_html(html):
 
 
 if __name__ == '__main__':
-    pass
+    args = docopt(__doc__)
+    filename = args['--filename']
+    run_parser = args['parser']
+    run_get_html = args['get_html_page']
+
+    if run_parser:
+        scrape_html(filename)
+    if run_get_html:
+        get_html_page(filename)
+
+    #get_html_page(filename)
