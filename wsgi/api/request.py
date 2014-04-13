@@ -17,6 +17,7 @@ fail = {
 class RequestWeb(object):
     
     def __init__(self):
+        print 'creating twitter bot'
         self.tb = TwitterBot()
         
     def _return_msg(self, main, msg):
