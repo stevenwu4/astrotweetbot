@@ -10,6 +10,7 @@ Expected twitter request:
 import os
 import twitter
 import time
+import requests
 
 CONSUMER_KEY = os.getenv('CONSUMER_KEY')
 CONSUMER_SECRET = os.getenv('CONSUMER_SECRET')
@@ -19,7 +20,6 @@ ACCESS_TOKEN_SECRET = os.getenv('ACCESS_TOKEN_SECRET')
 class TwitterBot(object):
 
     def __init__(self):
-        print CONSUMER_SECRET
         self.api = twitter.Api(consumer_key = CONSUMER_KEY,
             consumer_secret = CONSUMER_SECRET,
             access_token_key = ACCESS_TOKEN_KEY,
@@ -128,6 +128,8 @@ class TwitterBot(object):
             payload['features'] = queries[4].split('+')
 
         print payload
+        if (requests.get('http://bot-astrotweet.rhcloud.com/api/v1/sky?respond_to=sophcastellarin')):
+            print 'sent tweet'
 
     def send_payload_satellite(self, res):
         payload = {'lat':None, 'long':None, 'postal_code':None}
@@ -135,7 +137,10 @@ class TwitterBot(object):
         payload['lat'] = pos['lat']
         payload['long'] = pos['long']
         payload['postal_code'] = res.text.split(',')[-1].strip()
+        
         print payload
+        if (requests.get('http://bot-astrotweet.rhcloud.com/api/v1/satellite?respond_to=sophcastellarin')):
+            print 'sent tweet'
 
     def tweet_at(self, mssg, user_scr=None, user_id=None):
         # Tweets at a specific user
