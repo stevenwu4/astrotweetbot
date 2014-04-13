@@ -34,8 +34,7 @@ class RequestWeb(object):
                 'long': args['long']}
             
             message =  parser.get_tonights_sky_tweet(payload) 
-            print message
-            #self.tb.tweet_at(message, tar)
+            self.tb.tweet_at(message, tar)
             return self._return_msg('success', 'tweeted the sky')
         
         #TODO: make satellite parser
