@@ -14,7 +14,7 @@ def get_data(call):
         return jsonify({'call':'GET'})
         rw().determine_response(call, request.args)
     else:
-        #return jsonify(error_msg)
+        return jsonify(error_msg)
 
 if __name__ == "__main__":
     app.debug = True
