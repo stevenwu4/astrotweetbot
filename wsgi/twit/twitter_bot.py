@@ -19,8 +19,7 @@ ACCESS_TOKEN_SECRET = os.getenv('ACCESS_TOKEN_SECRET')
 class TwitterBot(object):
 
     def __init__(self):
-        print CONSUMER_KEY
-        print ACCESS_TOKEN_KEY
+        print CONSUMER_SECRET
         self.api = twitter.Api(consumer_key = CONSUMER_KEY,
             consumer_secret = CONSUMER_SECRET,
             access_token_key = ACCESS_TOKEN_KEY,
