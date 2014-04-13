@@ -53,7 +53,8 @@ class TwitterBot(object):
             return False
         
         return True
-    
+   
+    # GETS THE FEED FROM TWITTER AND SENDS PAYLOAD TO API
     def get_feed(self):
         # gets all the mentions
         mentions = self.api.GetMentions()
@@ -77,6 +78,26 @@ class TwitterBot(object):
                     return i.strip()
         return False
                     
+    def get_position(self, res):
+        pos = {'lat':None, 'long':None}
+
+        # gets the place tag
+        if res.place:
+            sum_lat = 0
+            sum_long = 0
+            box = res.place.get('bounding_box').get('coordinates')[0]
+            for i in box:
+                sum_lat += i[0]
+                sum_long += i[1]
+            pos['lat'] = (sum_lat/4.0)
+            pos['long'] = (sum_long/4.0)
+
+        # gets the geo tag
+        if res.coordinates:
+            pos['lat'] = res.coordinates.get('coordinates')[0]
+            pos['long'] = res.coordinates.get('coordinates')[1]
+        
+        return pos
 
     def send_payload_tonightsky(self, res):
         payload = {
@@ -89,21 +110,9 @@ class TwitterBot(object):
                 'Nedula', 'Galaxies', 'Planets', 'Comets',
                 'Asteroids', 'Double Stars', 'Star Group']
         }
-        # gets the place tag
-        if res.place:
-            sum_lat = 0
-            sum_long = 0
-            box = res.place.get('bounding_box').get('coordinates')[0]
-            for i in box:
-                sum_lat += i[0]
-                sum_long += i[1]
-            payload['lat'] = (sum_lat/4.0)
-            payload['long'] = (sum_long/4.0)
-
-        # gets the geo tag
-        if res.coordinates:
-            payload['lat'] = res.coordinates.get('coordinates')[0]
-            payload['long'] = res.coordinates.get('coordinates')[1]
+        pos = self.get_position(res)
+        payload['lat'] = pos['lat']
+        payload['long'] = pos['long']
         # fills in the rest of the payload
         queries = res.text.split(',')
 
@@ -120,7 +129,12 @@ class TwitterBot(object):
         print payload
 
     def send_payload_satellite(self, res):
-        payload = {'postal_code':None}
+        payload = {'lat':None, 'long':None, 'postal_code':None}
+        pos = self.get_position(res)
+        payload['lat'] = pos['lat']
+        payload['long'] = pos['long']
+        payload['postal_code'] = res.text.split(',')[-1].strip()
+        print payload
 
     def tweet_at(self, mssg, user_scr=None, user_id=None):
         # Tweets at a specific user
