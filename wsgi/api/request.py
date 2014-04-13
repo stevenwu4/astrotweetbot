@@ -33,6 +33,7 @@ class RequestWeb(object):
 
         if call == "sky":
             # TODO: call the sky scraper
+            print 'sky'
             self.tb.api.PostDirectMessage('Hey, you requested sky again', 
                 screen_name=tar)
             return self._return_msg(success, 'tweeted the sky')
