@@ -28,11 +28,3 @@ def info_to_tweet(sightings):
         else:
             sightings.pop(len(sightings) - 1)
     return result
-
-if __name__ == '__main__':
-    print info_to_tweet(
-        [{'primary_catalog': 'Jupiter',
-          'constellation': 'Gemini'},
-         {'primary_catalog': 'Mars',
-          'constellation': 'Cactus'}]
-    )

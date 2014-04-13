@@ -3,7 +3,9 @@
 Module for scraping info from tonight sky
 '''
 
+from scraped_to_tweet import info_to_tweet
 from bs4 import BeautifulSoup, SoupStrainer
+from datetime import datetime
 import json
 import urllib, urllib2
 
@@ -105,39 +107,31 @@ CONSTELLATION_MAPPING = {
 DIFFICULTY_KEYS = [
     'NE', 'Bino', 'Small', 'Easy', 'Medium', 'Hard'
 ]
+FEATURE_MAPPING = {
+    'Globular Clusters': 'Globs',
+    'Open Clusters': 'OpenCl',
+    'Nebula': 'Nebula',
+    'Galaxies': 'Galaxies',
+    'Planets': 'Planets',
+    'Comets': 'Comets',
+    'Asteroids': 'Asteroids',
+    'Double Stars': 'Doubles',
+    'Star Group': 'StarGrp'
+}
 
 
-def get_html_page(name_of_html, inbound_json):
-    payload = {}
-
-    #Load the user variables that don't require logic
-    latitude = inbound_json['lat']
-    longitude = inbound_json['long']
-    start = inbound_json['when']
-    length = inbound_json['length']
-    #Load the difficulty settings
-    #eg: if user said 3, it maps to small scope
-    #We assume that a user specifying a difficulty
-    #is comfortable with the levels below the specified level
-    difficulty = int(inbound_json['difficulty'])
-    for i in range(difficulty):
-        difficulty_payload_key = DIFFICULTY_KEYS[i]
-        payload[difficulty_payload_key] = '1'
-    #Load the desired object types
-    
-
-
+def get_html_page(inbound_json):
     payload = {
         #Location data from geotagged tweet
-        'Latitude': '49.1',#
-        'Longitude': '-78.8',#
+        #'Latitude': '49.1',#
+        #'Longitude': '-78.8',#
         'Horizon': '45',
         #When to observe
-        #*GMT Timezone, tweets come in GMT
-        'Start': '20',#
-        'Len': '4',#
+        #*GMT Timezone, tweets come in GMT Timezone (A0)
+        #'Start': '20',#
+        #'Len': '4',#
         'TimeZone': 'A0',
-        'Date': '12/14/2013',#
+        'Date': '{d.month}/{d.day}/{d.year}'.format(d=datetime.now()),
         #Difficulty of observing
         #'NE': '1',
         #'Bino': '1',
@@ -146,29 +140,49 @@ def get_html_page(name_of_html, inbound_json):
         #'Medium': '1',
         #'Hard': '1',
         #What to observe
-        'Globs': '1',#
-        'OpenCl': '1',#
-        'Nebula': '1',#
-        'Galaxies': '1',#
-        'Planets': '1',#
-        'Comets': '1',#
-        'Asteroids': '1',#
-        'Doubles': '1',#
-        'StarGrp': '1',#
+        #'Globs': '1',#
+        #'OpenCl': '1',#
+        #'Nebula': '1',#
+        #'Galaxies': '1',#
+        #'Planets': '1',#
+        #'Comets': '1',#
+        #'Asteroids': '1',#
+        #'Doubles': '1',#
+        #'StarGrp': '1',#
         #Never get prompted about having too many results
         'BigOK.x': '83',
         'BigOK.y': '13',
-        'BigOK': 'Yes'
+        'BigOK': 'Yes',
         #No idea what these are for, but we need 'em
         'Conutine.x': '146',#
         'Conutine.y': '17',#
     }
+    #Load the user variables that don't require logic
+    payload['Latitude'] = inbound_json['lat']
+    payload['Longitude'] = inbound_json['long']
+    payload['Start'] = inbound_json['when']
+    payload['Len'] = inbound_json['length']
+    #Load the difficulty settings
+    #eg: if user said 3, it maps to small scope
+    #We assume that a user specifying a difficulty
+    #is comfortable with the levels below the specified level
+    difficulty = int(inbound_json['difficulty'])
+    for i in range(difficulty):
+        difficulty_key = DIFFICULTY_KEYS[i]
+        payload[difficulty_key] = '1'
+    #Load the desired object types
+    #['Globular Clusters', 'Open Clusters', 'Nebula', 'Galaxies'
+    #'Planets', 'Comets', 'Asteroids', 'Double Stars', 'Star Group']
+    list_of_features = inbound_json['features']
+    for feature in list_of_features:
+        feature_key = FEATURE_MAPPING[feature]
+        payload[feature_key] = '1'
+
     payload = urllib.urlencode(payload)
 
     request = urllib2.Request(TONIGHTSSKY_URL, payload)
     response = urllib2.urlopen(request)
     html_result = response.read()
-
     filter_only_form = SoupStrainer('form')
     soup = BeautifulSoup(
         html_result, parse_only=filter_only_form
@@ -198,6 +212,7 @@ def get_html_page(name_of_html, inbound_json):
 
     #First 3 rows are garbage; description, headers & <hr>'s
     all_rows = all_rows[3:]
+    #print all_rows
 
     next_row_is_pair = False
 
@@ -241,15 +256,17 @@ def get_html_page(name_of_html, inbound_json):
             'primary_catalog': primary_catalog,
             'object_description': object_desc,
             'magnitude': magnitude,
-            'constellation': CONSTELLATION_MAPPING[constellation],
+            'constellation': CONSTELLATION_MAPPING[constellation.capitalize()],
         }
 
-        print json.dumps(row_header_mapping, indent=4, separators=(',', ': '))
-        print next_row_is_pair
+        #print json.dumps(row_header_mapping, indent=4, separators=(',', ': '))
+        #print next_row_is_pair
 
         list_of_mappings.append(row_header_mapping)
         #print i, ':', len(all_cells_in_row)
 
-    #for mapping in list_of_mappings:
-    #    print json.dumps(mapping, indent=4, separators=(',', ': '))
-    return list_of_mappings
+    for mapping in list_of_mappings:
+        print json.dumps(mapping, indent=4, separators=(',', ': '))
+    
+    tweet = info_to_tweet(list_of_mappings)
+    return tweet
