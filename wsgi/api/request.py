@@ -4,6 +4,8 @@ Module that scrapes a given website and returns astronomical data info
 
 import requests
 from twit.twitter_bot import TwitterBot
+# Tonight sky parser
+from scraper import parser
 
 class RequestWeb(object):
     
@@ -22,10 +24,11 @@ class RequestWeb(object):
             return self._return_msg('fail', 'No target user') 
 
         if call == "sky":
-            # TODO: call the sky scraper
             self.tb.tweet_at('Hey, you requested sky again', 
                 user_scr=tar)
             return self._return_msg('success', 'tweeted the sky')
+        
+        #TODO: make satellite parser
         elif call == "satellite":
             # TODO: call the satellite scraper
             self.tb.tweet_at('Hey, you requested satellite', 

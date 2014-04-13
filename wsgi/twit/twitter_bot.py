@@ -27,7 +27,7 @@ class TwitterBot(object):
             access_token_key = ACCESS_TOKEN_KEY,
             access_token_secret= ACCESS_TOKEN_SECRET)
         # cron is minutely
-        self.POLL = 1
+        self.POLL = 50
         self.data_sources_key = ['sky', 'satellite']
 
     def _determine_freshness(self, tm):
@@ -110,9 +110,7 @@ class TwitterBot(object):
             'when': None,
             'length': None,
             'difficulty': 1,
-            'features': ['Globular Clusters', 'Open Clusters',
-                'Nedula', 'Galaxies', 'Planets', 'Comets',
-                'Asteroids', 'Double Stars', 'Star Group']
+            'features': 'Globular Clusters+Open Clusters+Nebula+Galaxies+Planets+Comets+Asteroids+Double Stars+Star Group'
         }
         pos = self.get_position(res)
         payload['lat'] = pos['lat']
@@ -128,10 +126,18 @@ class TwitterBot(object):
         if len(queries) > 3:
             payload['difficulty'] = queries[3].strip()
         if len(queries) > 4:
-            payload['features'] = queries[4].split('+')
+            payload['features'] = queries[4].strip()
 
-        print payload
-        if (requests.get('http://bot-astrotweet.rhcloud.com/api/v1/sky?respond_to=sophcastellarin')):
+        name = res.user.screen_name
+        url = ('http://bot-astrotweet.rhcloud.com/api/v1/sky?respond_to=' + 
+        name + "&lat=" + str(payload['lat']) +
+        "&long=" + str(payload['long']) + 
+        "&when=" + str(payload['when']) +
+        "&length=" + str(payload['length'])+
+        "&difficulty=" + str(payload['difficulty']) +
+        "&features=" + str(payload['features']))
+        print url
+        if (requests.get(url)):
             print 'sent tweet'
 
     def send_payload_satellite(self, res):
@@ -139,11 +145,14 @@ class TwitterBot(object):
         pos = self.get_position(res)
         payload['lat'] = pos['lat']
         payload['long'] = pos['long']
-        payload['postal_code'] = res.text.split(',')[-1].strip()
-        
-        print payload
-        if (requests.get('http://bot-astrotweet.rhcloud.com/api/v1/satellite?respond_to=sophcastellarin')):
+        payload['postal_code'] = res.text.split(',')[-1].encode().strip()
+       
+        name = res.user.screen_name
+        url = ('http://bot-astrotweet.rhcloud.com/api/v1/satellite?respond_to=' + name + '&lat=' + str(payload['lat']) + "&long=" + str(payload['long']) + "&postal_code=" + payload['postal_code'])
+        print url
+        if (requests.get(url)):
             print 'sent tweet'
+        print payload['postal_code']
 
     def tweet_at(self, mssg, user_scr):
         # Tweets at a specific user
