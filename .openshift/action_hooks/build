@@ -1,2 +1,0 @@
-echo 'sourcing environment'
-source ${OPENSIFT_DATA_DIR}.deploy
