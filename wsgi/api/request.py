@@ -24,8 +24,18 @@ class RequestWeb(object):
             return self._return_msg('fail', 'No target user') 
 
         if call == "sky":
-            self.tb.tweet_at('Hey, you requested sky again', 
-                user_scr=tar)
+            payload = {
+                'difficulty': args['difficulty'],
+                'user': args['respond_to'],
+                'length': args['length'],
+                'features': args['features'].split(';'),
+                'when': args['when'],
+                'lat': args['lat'],
+                'long': args['long']}
+            
+            message =  parser.get_tonights_sky_tweet(payload) 
+            print message
+            #self.tb.tweet_at(message, tar)
             return self._return_msg('success', 'tweeted the sky')
         
         #TODO: make satellite parser

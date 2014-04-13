@@ -2,7 +2,7 @@
 Module to get who tweeted at @astro_tweet_bot and then tell the server stuff
 Expected twitter request:
     For sky
-    @astro_tweet_bot, sky, <start_time> + <length> [, <difficulty>, <info wanted>]
+    @astro_tweet_bot, sky, <start_time> + <length> [, <difficulty>, <info wantedone>;<info wantedtwo>]
     For satellite
     @astro_tweet_bot,  satellite, <postal_code>
 '''
@@ -127,6 +127,11 @@ class TwitterBot(object):
             payload['difficulty'] = queries[3].strip()
         if len(queries) > 4:
             payload['features'] = queries[4].strip()
+
+
+        if lat == None or long == None or when == None or length == None:
+            print 'invalid'
+            return
 
         name = res.user.screen_name
         url = ('http://bot-astrotweet.rhcloud.com/api/v1/sky?respond_to=' + 
