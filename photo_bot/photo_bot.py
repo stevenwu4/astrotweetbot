@@ -1,11 +1,19 @@
 import json
+import urllib
+import traceback
 from urllib2 import Request, urlopen, URLError, HTTPError
-from time import sleep
+from time import sleep, time
 
 
 class RequestFailedError(Exception):
     def __init__(self, message):
         Exception.__init__(self, message)
+
+
+class DownloadFailedError(Exception):
+    def __init__(self, message):
+        Exception.__init__(self, message)
+
 
 def photo_to_url_flickr(photo_dict):
     """
@@ -23,7 +31,7 @@ def photo_to_url_flickr(photo_dict):
         .format(farm, server_id, p_id, secret)
 
 
-def check_validity_flickr(photo_dict, valid_licenses):
+def check_validity_flickr(photo_dict):
     """
     Checks whether a photo is suitable for banner use
     params photo_dict - a photo dictionary returned by the flickr api
@@ -36,17 +44,6 @@ def check_validity_flickr(photo_dict, valid_licenses):
     except Exception:
         pass
 
-    if "photo" in info_response:
-        if "license" in info_response['photo']:
-            if int(info_response['photo']["license"]) in valid_licenses:
-                pass
-            else:
-                return False
-        else:
-            return False
-    else:
-        return False
-
     if "sizes" in size_response:
         sizes = [(s['width'], s['height']) for s in size_response['sizes']]
         for w, h in sizes:
@@ -54,18 +51,21 @@ def check_validity_flickr(photo_dict, valid_licenses):
                 return True
     return False
 
+
 def _construct_rest_url_flickr(api_name, args):
     url_prefix = "https://api.flickr.com/services/rest/?method="
     api_key = "d01f1048dbb3b9159e6815962b2abd9b"
     result = url_prefix + api_name + "&"
     result += "format=json&"
     for k, v in args.iteritems():
-        result = result + k + "=" + v + "&"
+        result = result + str(k) + "=" + str(v) + "&"
     result = result + "api_key=" + api_key
     return result
 
+
 def _get_json_for_response(response_string):
     return response_string[14:len(response_string) - 1]
+
 
 def call_flickr(api_name, args):
     """
@@ -82,35 +82,80 @@ def call_flickr(api_name, args):
         try:
             response = urlopen(request)
             kittens = response.read()
-            return json.loads(_get_json_for_response(kittens))
+            dict_response = json.loads(_get_json_for_response(kittens))
+            if "stat" in dict_response:
+                if dict_response["stat"] == "fail":
+                    print ("Api request returned fail. URL", request.get_full_url())
+                    continue
+            return dict_response
         except URLError, e:
             print "Request failed. URL: ", request.get_full_url(), "Reason:", e.reason
             sleep(retry_delay)  # dumb dumb just retry
-    raise RequestFailedError("Too many retries, URL:", request.get_full_url())
+    raise RequestFailedError("Too many retries, URL:s" % request.get_full_url())
+
+
+def _get_good_licenses():
+    licenses = call_flickr("flickr.photos.licenses.getInfo", {})
+    good_license_ids = []
+    if "licenses" in licenses:
+        # no try and except here, since a fail her is desirable when api changes
+        for l in licenses['licenses']['license']:
+            if 'Attribution' in l['name'] \
+               or "No known copyright restrictions" in l['name']:
+                good_license_ids.append(str(l['id']))
+    return ",".join(good_license_ids)
+
+
+def _download_img(url):
+    retry_limit = 3
+    retry_delay = 5
+    file_name = 'today.jpg'
+    for c in range(retry_limit):
+        try:
+            download = urllib.urlretrieve(url, file_name)
+            if "image/jpeg" in str(download[1]):
+                return file_name
+            else:
+                raise DownloadFailedError("Invalid image type/not an image")
+        except URLError as e:
+            print("Image download failed URL:", url, "Reason:", e.reason)
+            sleep(retry_delay)
+
+
+def start_bot():
+    #search flickr :D
+    #save photo :D
+    #upload to twitter
+    #periodicly do that and delete last one :D
+    period = 300  # seconds
+    keyword = "sky"
+    while True:
+        image_index = 0
+        while True:
+            try:
+                search_args = {
+                    "min_upload_date": time() - 86400,  # yesterday this time
+                    "safe_search": 1,  # don't want no prono
+                    "sort": "relevance",
+                    "license": _get_good_licenses(),
+                    "text": keyword,
+                    "per_page": 5
+                }
+                to_download = call_flickr("flickr.photos.search", search_args)['photos']['photo'][image_index]
+                file_name = _download_img(photo_to_url_flickr(to_download))
+                #s
+            except RequestFailedError:
+                traceback.print_exc()
+            except DownloadFailedError as e:
+                print "Error occurred after downloading image.", e.message
+                image_index += 1  # try next image
+                if image_index > 4:
+                    print("All 5 downloads failed! No update happen")
+                    break  # all 5 failed. no update this period
+        sleep(period)
 
 if __name__ == '__main__':
-    raise RequestFailedError('aliens invaded')
+    # raise RequestFailedError('aliens invaded')
+    _download_img("http://upload.wikimedia.org/wikipedia/commons/2/2a/Junonia_lemonias_DSF_upper_by_Kadavoor.JPG")
     print photo_to_url_flickr({"farm": "500", "server": "1000", "id": "123", "secret": "100"})
-    call_flickr("flickr.test.echo", {"foo": "bar"})
     print _construct_rest_url_flickr("flickr.test.echo", {"foo": "bar"})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
