@@ -9,12 +9,13 @@ def index():
 
 @app.route('/api/v1/<path:call>', methods=['GET'])
 def get_data(call):
-    error_msg = {'success':1, 'error':'no'}
-    if request.method == 'GET':
-        rw().determine_response(call, request.args)
-        return jsonify({'method':'GET'})
+    if request.method == 'GET' and request.args:
+        return jsonify(rw().determine_response(call, request.args))
     else:
-        return jsonify(error_msg)
+        return jsonify({
+            'success':False,
+            'error':True,
+            'msg':'Did not specify a user'})
 
 if __name__ == "__main__":
     app.debug = True
