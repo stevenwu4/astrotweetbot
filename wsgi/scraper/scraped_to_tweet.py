@@ -6,10 +6,11 @@ TEMPLATES = [ "You could see %s in %s, ",
               "You might find %s in %s constellation, "
             ]
 
-def info_to_tweet(sightings):
+def info_to_tweet(sightings, user_name_len):
     # expects a list of dicts
     template = TEMPLATES[random.randrange(len(TEMPLATES))]
-    result = ""
+    result = "" 
+
     while True:
         result = template % (sightings[0]['primary_catalog'], sightings[0]['constellation'])
         for c in range(1, len(sightings)):
@@ -23,8 +24,10 @@ def info_to_tweet(sightings):
             else:
                 result += "%s in %s" % (sightings[c]['primary_catalog'], sightings[c]['constellation'])
 
-        if len(result) <= 140:
+        if len(result) <= 140 - user_name_len+1:
             break
+        elif len(sightings) == 0:
+            return -1
         else:
             sightings.pop(len(sightings) - 1)
     return result

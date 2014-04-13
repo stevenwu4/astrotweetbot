@@ -268,5 +268,6 @@ def get_html_page(inbound_json):
     for mapping in list_of_mappings:
         print json.dumps(mapping, indent=4, separators=(',', ': '))
     
-    tweet = info_to_tweet(list_of_mappings)
+    user_name_length = len(inbound_json['user'])
+    tweet = info_to_tweet(list_of_mappings, user_name_length)
     return tweet
