@@ -1,17 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Necessity - music discovery</title>
+<title>Astro Tweet Bot - It's rad</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content"Discover your music." />
-<BODY bgcolor="#e4dbbf">
+<meta name="description" content"I wonder whats in the sky tonight." />
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 </head>
+<link rel="stylesheet" href="/static/css/stylin.css">
+
+<script type="text/javascript">
+    function changecontext(newPage){
+        document.getElementById('specialcontext').src = newPage;
+    }
+</script>
 
 <body>
 <div class=container>
-<h1>Astro Tweet Bot</h1>
-<h3>It's rad</h3>
+    <h1>Astro Tweet Bot</h1>
+    <h3>It's rad</h3>
+    <center>
+    <div class="row" id="menu-bar" height="150px" width="80%">
+         <div class="col-sm-4">
+            <strong onclick="changecontext('/static/aboutproject.html')">About the project</strong>
+         </div>
+         <div class="col-sm-4">
+            <strong onclick="changecontext('/static/aboutus.html')">About us</strong>
+         </div>
+         <div class="col-md-4">
+            <strong onclick="changecontext('/static/coolstuff.html')">Cool stuff</strong>
+         </div>
+    </div>
+    <br><br>
+    <div class="row" height="500px" width="80%">
+        <div class="col-md-6">
+<a class="twitter-timeline" href="https://twitter.com/astro_tweet_bot" data-widget-id="455419694057394176">Tweets by @astro_tweet_bot</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+        </div>
+        <div class="col-md-6">
+            <iframe id="specialcontext" frameBorder="0" src="/static/aboutproject.html">
+            </iframe>
+        </div>
+    </div>
+    <center>
 </div>
 </body>
 
