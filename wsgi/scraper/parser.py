@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-"""
-Usage:
-    parser.py parser (--filename=<filename>)
-    parser.py get_html_page (--filename=<filename)
-"""
+'''
+Module for scraping info from tonight sky
+'''
 
-from docopt import docopt
 from bs4 import BeautifulSoup, SoupStrainer
 import json
 import urllib, urllib2
@@ -172,14 +169,9 @@ def get_html_page(name_of_html, inbound_json):
     response = urllib2.urlopen(request)
     html_result = response.read()
 
-    destination_html = open(name_of_html, 'w')
-    destination_html.write(html_result)
-
-
-def scrape_html(html):
     filter_only_form = SoupStrainer('form')
     soup = BeautifulSoup(
-        open(html), parse_only=filter_only_form
+        html_result, parse_only=filter_only_form
     )
     table = soup.find_all('table')
     info_table = table[0]
@@ -261,17 +253,3 @@ def scrape_html(html):
     #for mapping in list_of_mappings:
     #    print json.dumps(mapping, indent=4, separators=(',', ': '))
     return list_of_mappings
-
-
-if __name__ == '__main__':
-    args = docopt(__doc__)
-    filename = args['--filename']
-    run_parser = args['parser']
-    run_get_html = args['get_html_page']
-
-    if run_parser:
-        scrape_html(filename)
-    if run_get_html:
-        get_html_page(filename)
-
-    #get_html_page(filename)
