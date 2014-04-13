@@ -11,13 +11,10 @@ def index():
 def get_data(call):
     error_msg = {'success':1, 'error':'no'}
     if request.method == 'GET':
-        return jsonify(rw().determine_response(call, request.args))
+        return jsonify({'call':'GET'})
+        rw().determine_response(call, request.args)
     else:
-        return jsonify(error_msg)
-
-@app.route('/api/test/', methods=['GET'])
-def run_test():
-    return jsonify({'it\'s':'working'})
+        #return jsonify(error_msg)
 
 if __name__ == "__main__":
     app.debug = True
