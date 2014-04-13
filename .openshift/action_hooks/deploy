@@ -1,1 +1,1 @@
-source ${OPENSIFT_DATA_DIR}/.deploy
+source ${OPENSIFT_DATA_DIR}.deploy
