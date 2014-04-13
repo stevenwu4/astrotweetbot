@@ -24,7 +24,7 @@ class TwitterBot(object):
             consumer_secret = CONSUMER_SECRET,
             access_token_key = ACCESS_TOKEN_KEY,
             access_token_secret= ACCESS_TOKEN_SECRET)
-        self.POLL = 1
+        self.POLL = 10
         self.data_sources_key = ['sky', 'satellite']
 
     def _determine_freshness(self, tm):
