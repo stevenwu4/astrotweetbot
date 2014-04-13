@@ -11,7 +11,8 @@ def index():
 def get_data(call):
     error_msg = {'success':1, 'error':'no'}
     if request.method == 'GET':
-        return jsonify(rw().determine_response(call, request.args))
+        print (rw().determine_response(call, request.args))
+        return jsonify({'method':'GET'})
     else:
         return jsonify(error_msg)
 
