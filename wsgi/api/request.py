@@ -25,13 +25,13 @@ class RequestWeb(object):
 
         if call == "sky":
             # TODO: call the sky scraper
-            self.tb.api.PostDirectMessage('Hey, you requested sky again', 
-                screen_name=tar)
+            self.tb.tweet_at('Hey, you requested sky again', 
+                user_scr=tar)
 #            return self._return_msg('success', 'tweeted the sky')
         elif call == "satellite":
             # TODO: call the satellite scraper
-            self.tb.api.PostDirectMessage('Hey, you requested satellite', 
-                screen_name=tar)
+            self.tb.tweet_at('Hey, you requested satellite', 
+                user_scr=tar)
 #            return self._return_msg('success', 'tweeted the satellite')
 #        else:
  #           return self._return_msg('fail', 'unspecified query')
