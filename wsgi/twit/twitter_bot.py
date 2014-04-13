@@ -136,12 +136,6 @@ class TwitterBot(object):
         payload['postal_code'] = res.text.split(',')[-1].strip()
         print payload
 
-    def tweet_at(self, mssg, user_scr=None, user_id=None):
-        # Tweets at a specific user
-        self.api.PostDirectMessage(mssg, 
-            screen_name=user_scr, 
-            user_id=user_id)
-
     def test(self):
         self.get_feed()
 
