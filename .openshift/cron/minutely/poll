@@ -1,2 +1,2 @@
 #!/bin/bash
-PYTHONPATH=. python ${OPENSHIFT_REPO_DIR}/wsgi/twit/twitter_bot.py
+PYTHONPATH=. python ${OPENSHIFT_REPO_DIR}wsgi/twit/twitter_bot.py
