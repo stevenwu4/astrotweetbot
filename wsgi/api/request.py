@@ -25,6 +25,7 @@ class RequestWeb(object):
         return res
 
     def determine_response(self, call, args):
+        print 'getting response'
         tar = args['respond_to']
         if tar == None:
             return self._return_msg(fail, 'No target user') 
