@@ -10,9 +10,7 @@
 
 <script type="text/javascript">
     function changecontext(newPage){
-        ifrm = document.getElementsByTagName('iframe')[0];
-        ifrm.src = newPage;
-        console.log('chaged iframe');
+        document.getElementById('specialcontext').src = newPage;
     }
 </script>
 
@@ -26,7 +24,7 @@
             <strong onclick="changecontext('/static/aboutproject.html')">About the project</strong>
          </div>
          <div class="col-sm-4">
-            <strong onclick="changecontext('/static/aboutus.html')">About the us</strong>
+            <strong onclick="changecontext('/static/aboutus.html')">About us</strong>
          </div>
          <div class="col-md-4">
             <strong onclick="changecontext('/static/coolstuff.html')">Cool stuff</strong>
@@ -39,7 +37,7 @@
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
         </div>
         <div class="col-md-6">
-            <iframe frameBorder="0" src="/static/aboutproject.html">
+            <iframe id="specialcontext" frameBorder="0" src="/static/aboutproject.html">
             </iframe>
         </div>
     </div>
