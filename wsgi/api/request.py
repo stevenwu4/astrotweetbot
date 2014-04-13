@@ -20,17 +20,18 @@ class RequestWeb(object):
     def determine_response(self, call, args):
         tar = args['respond_to']
         if tar == None:
-            return self._return_msg('fail', 'No target user') 
+#            return self._return_msg('fail', 'No target user') 
+            return
 
         if call == "sky":
             # TODO: call the sky scraper
             self.tb.api.PostDirectMessage('Hey, you requested sky again', 
                 screen_name=tar)
-            return self._return_msg('success', 'tweeted the sky')
+#            return self._return_msg('success', 'tweeted the sky')
         elif call == "satellite":
             # TODO: call the satellite scraper
             self.tb.api.PostDirectMessage('Hey, you requested satellite', 
                 screen_name=tar)
-            return self._return_msg('success', 'tweeted the satellite')
-        else:
-            return self._return_msg('fail', 'unspecified query')
+#            return self._return_msg('success', 'tweeted the satellite')
+#        else:
+ #           return self._return_msg('fail', 'unspecified query')
