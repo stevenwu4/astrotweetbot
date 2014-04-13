@@ -120,7 +120,9 @@ FEATURE_MAPPING = {
 }
 
 
-def get_html_page(inbound_json):
+
+
+def get_tonights_sky_tweet(inbound_json):
     payload = {
         #Location data from geotagged tweet
         #'Latitude': '49.1',#
