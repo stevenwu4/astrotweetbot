@@ -160,10 +160,10 @@ def get_tonights_sky_tweet(inbound_json):
         'Conutine.y': '17',#
     }
     #Load the user variables that don't require logic
-    payload['Latitude'] = inbound_json['lat']
-    payload['Longitude'] = inbound_json['long']
-    payload['Start'] = inbound_json['when']
-    payload['Len'] = inbound_json['length']
+    payload['Latitude'] = inbound_json['lat'].encode()
+    payload['Longitude'] = inbound_json['long'].encode()
+    payload['Start'] = inbound_json['when'].encode()
+    payload['Len'] = inbound_json['length'].encode()
     #Load the difficulty settings
     #eg: if user said 3, it maps to small scope
     #We assume that a user specifying a difficulty
@@ -181,7 +181,6 @@ def get_tonights_sky_tweet(inbound_json):
         payload[feature_key] = '1'
 
     payload = urllib.urlencode(payload)
-
     request = urllib2.Request(TONIGHTSSKY_URL, payload)
     response = urllib2.urlopen(request)
     html_result = response.read()
@@ -255,7 +254,7 @@ def get_tonights_sky_tweet(inbound_json):
             #^no longer including, too much noise & not useful
 
         row_header_mapping = {
-            'primary_catalog': primary_catalog,
+            'primary_catalog': primary_catalog.lstrip(','),
             'object_description': object_desc,
             'magnitude': magnitude,
             'constellation': CONSTELLATION_MAPPING[constellation.capitalize()],

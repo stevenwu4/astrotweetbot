@@ -2,7 +2,7 @@
 Module to get who tweeted at @astro_tweet_bot and then tell the server stuff
 Expected twitter request:
     For sky
-    @astro_tweet_bot, sky, <start_time> + <length> [, <difficulty>, <info wanted>]
+    @astro_tweet_bot, sky, <start_time> + <length> [, <difficulty>, <info wantedone>;<info wantedtwo>]
     For satellite
     @astro_tweet_bot,  satellite, <postal_code>
 '''
@@ -27,7 +27,7 @@ class TwitterBot(object):
             access_token_key = ACCESS_TOKEN_KEY,
             access_token_secret= ACCESS_TOKEN_SECRET)
         # cron is minutely
-        self.POLL = 50
+        self.POLL = 1
         self.data_sources_key = ['sky', 'satellite']
 
     def _determine_freshness(self, tm):
@@ -110,7 +110,7 @@ class TwitterBot(object):
             'when': None,
             'length': None,
             'difficulty': 1,
-            'features': 'Globular Clusters+Open Clusters+Nebula+Galaxies+Planets+Comets+Asteroids+Double Stars+Star Group'
+            'features': 'Globular Clusters;Open Clusters;Nebula;Galaxies;Planets;Comets;Asteroids;Double Stars;Star Group'
         }
         pos = self.get_position(res)
         payload['lat'] = pos['lat']
@@ -127,6 +127,11 @@ class TwitterBot(object):
             payload['difficulty'] = queries[3].strip()
         if len(queries) > 4:
             payload['features'] = queries[4].strip()
+
+
+        if payload['lat'] == None or payload['long'] == None or payload['when'] == None or payload['length'] == None:
+            print 'invalid'
+            return
 
         name = res.user.screen_name
         url = ('http://bot-astrotweet.rhcloud.com/api/v1/sky?respond_to=' + 
@@ -150,16 +155,17 @@ class TwitterBot(object):
         name = res.user.screen_name
         url = ('http://bot-astrotweet.rhcloud.com/api/v1/satellite?respond_to=' + name + '&lat=' + str(payload['lat']) + "&long=" + str(payload['long']) + "&postal_code=" + payload['postal_code'])
         print url
-        if (requests.get(url)):
-            print 'sent tweet'
-        print payload['postal_code']
+#        if (requests.get(url)):
+#            print 'sent tweet'
+        print payload
 
     def tweet_at(self, mssg, user_scr):
         # Tweets at a specific user
-        res = "@" + user_scr + " " + mssg
+        res = "@" + user_scr + " " + mssg + " " + time.strftime('%h/%d/ %H:%M')
         try:
             self.api.PostUpdate(res)
         except TwitterError:
+            print 'TwitterError'
             pass
 
     def test(self):
