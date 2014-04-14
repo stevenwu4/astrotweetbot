@@ -44,7 +44,7 @@ class RequestWeb(object):
                 'zip_code': args['postal_code']
             }
             message = parser.get_satellite_tweet(payload)
-            self.tb.tweet_at(message, tar)
+            self.tb.tweet_at(message.encode(), tar)
             return self._return_msg('success', 'tweeted the satellite')
         
         elif call == "error":
