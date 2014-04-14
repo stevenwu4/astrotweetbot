@@ -56,8 +56,21 @@ def satellite_info_to_tweet(satellites, user_name_len):
         direction=best_satellite['direction'],
         degrees=best_satellite['max_elevation']
     )
+
+    string_template_short = (
+        "{magnitude}: {satellite} is best seen at {best_time}.  "
+        "Look {direction}!"
+    ).format(
+        magnitude=best_satellite['magnitude'],
+        satellite=best_satellite['name'],
+        best_time=best_satellite['best_time'],
+        direction=best_satellite['direction'],
+    )
+
     if len(string_template) + user_name_len <= 140:
         return string_template
+    elif len(string_template_short) + user_name_len <= 140:
+        return string_template_short
     else: 
         return -1
     
