@@ -129,7 +129,7 @@ class TwitterBot(object):
             payload['features'] = queries[4].strip()
 
 
-        if lat == None or long == None or when == None or length == None:
+        if payload['lat'] == None or payload['long'] == None or payload['when'] == None or payload['length'] == None:
             print 'invalid'
             return
 
@@ -155,16 +155,17 @@ class TwitterBot(object):
         name = res.user.screen_name
         url = ('http://bot-astrotweet.rhcloud.com/api/v1/satellite?respond_to=' + name + '&lat=' + str(payload['lat']) + "&long=" + str(payload['long']) + "&postal_code=" + payload['postal_code'])
         print url
-        if (requests.get(url)):
-            print 'sent tweet'
-        print payload['postal_code']
+#        if (requests.get(url)):
+#            print 'sent tweet'
+        print payload
 
     def tweet_at(self, mssg, user_scr):
         # Tweets at a specific user
-        res = "@" + user_scr + " " + mssg + time.strftime('%h/%d/ %H:%M')
+        res = "@" + user_scr + " " + mssg + " " + time.strftime('%h/%d/ %H:%M')
         try:
             self.api.PostUpdate(res)
         except TwitterError:
+            print 'TwitterError'
             pass
 
     def test(self):

@@ -123,8 +123,6 @@ FEATURE_MAPPING = {
 
 
 def get_tonights_sky_tweet(inbound_json):
-    print 'inbound ' 
-    print inbound_json
     payload = {
         #Location data from geotagged tweet
         #'Latitude': '49.1',#
@@ -182,11 +180,7 @@ def get_tonights_sky_tweet(inbound_json):
         feature_key = FEATURE_MAPPING[feature]
         payload[feature_key] = '1'
 
-    print 'first payload ' 
-    print payload
     payload = urllib.urlencode(payload)
-    print 'second payload ' 
-    print payload
     request = urllib2.Request(TONIGHTSSKY_URL, payload)
     response = urllib2.urlopen(request)
     html_result = response.read()
