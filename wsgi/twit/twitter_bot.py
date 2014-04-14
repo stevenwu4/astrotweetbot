@@ -27,7 +27,7 @@ class TwitterBot(object):
             access_token_key = ACCESS_TOKEN_KEY,
             access_token_secret= ACCESS_TOKEN_SECRET)
         # cron is minutely
-        self.POLL = 50
+        self.POLL = 1
         self.data_sources_key = ['sky', 'satellite']
 
     def _determine_freshness(self, tm):
