@@ -110,7 +110,7 @@ class TwitterBot(object):
             'when': None,
             'length': None,
             'difficulty': 1,
-            'features': 'Globular Clusters+Open Clusters+Nebula+Galaxies+Planets+Comets+Asteroids+Double Stars+Star Group'
+            'features': 'Globular Clusters;Open Clusters;Nebula;Galaxies;Planets;Comets;Asteroids;Double Stars;Star Group'
         }
         pos = self.get_position(res)
         payload['lat'] = pos['lat']
