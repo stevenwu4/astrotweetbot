@@ -161,7 +161,7 @@ class TwitterBot(object):
 
     def tweet_at(self, mssg, user_scr):
         # Tweets at a specific user
-        res = "@" + user_scr + " " + mssg
+        res = "@" + user_scr + " " + mssg + time.strftime('%h/%d/ %H:%M')
         try:
             self.api.PostUpdate(res)
         except TwitterError:
