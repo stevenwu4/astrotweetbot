@@ -106,8 +106,7 @@ def main():
             # print "start it"
             for c in range(twitter_retries):
                 try:
-                    twitter.update_status(status=random.choice(MESSAGES)+" "+l)
-                    # twitter.update_status_with_media(media=encoded, status=random.choice(MESSAGES))
+                    twitter.update_status_with_media(media=open(file_name, 'r'), status=random.choice(MESSAGES))
                     print ("photo successfully tweeted")
                     return 0
                 except TwythonRateLimitError as e:
