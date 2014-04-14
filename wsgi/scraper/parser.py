@@ -3,13 +3,16 @@
 Module for scraping info from tonight sky
 '''
 
-from scraped_to_tweet import info_to_tweet
+from scraped_to_tweet import (
+    tonightssky_info_to_tweet, satellite_info_to_tweet
+)
 from bs4 import BeautifulSoup, SoupStrainer
 from datetime import datetime
 import json
 import urllib, urllib2
+import re
 
-
+#TONIGHTS SKY CONSTANTS
 TONIGHTSSKY_URL = 'http://tonightssky.com/BigList.php'
 GOOGLE_TIMEZONE_API_KEY = 'AIzaSyDcHQQkaxRFKS4l2xMJaJ4YTo-nO53SwWM'
 #http://dibonsmith.com/constel.htm
@@ -119,7 +122,11 @@ FEATURE_MAPPING = {
     'Star Group': 'StarGrp'
 }
 
-
+########
+#SATELLITE CONSTANTS
+NUM_HEADERS_IN_SATELLITE_TABLE = 6
+SATELLITE_FLYBYS_URL = 'http://www.spaceweather.com/flybys/flybys.php'
+DEGREE_REGEX = re.compile('[\d]*')
 
 
 def get_tonights_sky_tweet(inbound_json):
@@ -270,5 +277,97 @@ def get_tonights_sky_tweet(inbound_json):
         print json.dumps(mapping, indent=4, separators=(',', ': '))
     
     user_name_length = len(inbound_json['user'])
-    tweet = info_to_tweet(list_of_mappings, user_name_length)
+    tweet = tonightssky_info_to_tweet(list_of_mappings, user_name_length)
+    return tweet
+
+
+def get_satellite_tweet(inbound_json):
+    #latitude = inbound_json['lat']
+    #longitude = inbound_json['long']
+    zip_code = inbound_json['zip_code']
+    payload = {
+        'zip': zip_code
+    }
+    payload = urllib.urlencode(payload)
+
+    request = urllib2.Request(SATELLITE_FLYBYS_URL, payload)
+    response = urllib2.urlopen(request)
+    html_result = response.read()
+
+    soup = BeautifulSoup(html_result)
+    tables = soup.find_all('table', background='images/flyover_tablebg.jpg')
+    
+    this_month = datetime.now().strftime('%B')
+    this_day = str(datetime.now().day)
+    today = this_month + ' ' + this_day
+
+    todays_table_index = 0
+    #Find out which table is today's
+    exit_out = False
+    for i, table in enumerate(tables):
+        row = table.find('tr')
+        tds = row.find_all('td')
+        for td in tds:
+            if td.text.strip() == today:
+                todays_table_index = i
+                exit_out = True
+        if exit_out:
+            break
+
+    todays_table = tables[todays_table_index]
+
+    rows = todays_table.find_all('tr')
+    """
+    #Need to traverse backwards because for some reason,
+    #the information is repeated and since we don't know at run-time
+    #how many useful rows there will be, we'll traverse backwards
+    #until we get the header texts
+    #Some rows contain td's with no classes
+    rows_stopping_index = 0
+    for i, row in enumerate(reversed(rows))
+        tds = row.find_all('td')
+        for td in tds:
+            try:
+                if td['class'] == 'spacecraftColumnTitleText':
+                    rows_stopping_index = i
+                    break
+            except:
+                pass
+    """
+    all_tds = rows[0].find_all('td')
+    #Dump all useful data into a list
+    list_of_info = []
+    for t in tds:
+        try:
+            if 'satTableDataText' in t['class']:
+                list_of_info.append(t.text.strip())
+        except:
+            pass
+    #Find out how many rows in the table there were
+    if len(list_of_info)%NUM_HEADERS_IN_SATELLITE_TABLE != 0:
+        return (
+            'Sorry, there was an error getting the data.'
+            'Here is a cookie for finding an error for us to debug!'
+        )
+    else:
+        num_rows = len(list_of_info) / NUM_HEADERS_IN_SATELLITE_TABLE
+    #Dump useful data into a list of dicts, each row being a dict
+    list_of_mappings = []
+    for i in range(num_rows):
+        satellite_mapping = {}
+        adjusted_index = NUM_HEADERS_IN_SATELLITE_TABLE*i
+        satellite_mapping['name'] = list_of_info[adjusted_index]
+        satellite_mapping['rise_time'] = list_of_info[1+adjusted_index]
+        satellite_mapping['direction'] = list_of_info[2+adjusted_index]
+        satellite_mapping['best_time'] = list_of_info[3+adjusted_index]
+        satellite_mapping['max_elevation'] = re.search(DEGREE_REGEX, list_of_info[4+adjusted_index]).group()
+        satellite_mapping['magnitude'] = list_of_info[5+adjusted_index].replace(' (dim)', '')
+        list_of_mappings.append(satellite_mapping)
+
+    for mapping in list_of_mappings:
+        print json.dumps(mapping, indent=4, separators=(',', ': '))
+
+    user_name_length = len(inbound_json['user'])
+    tweet = satellite_info_to_tweet(list_of_mappings, user_name_length)
+    print tweet
     return tweet

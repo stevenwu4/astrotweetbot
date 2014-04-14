@@ -6,7 +6,7 @@ TEMPLATES = ["You could see %s in %s, ",
              "%s is above you in the %s constellation, you could also find ",
              "You might find %s in %s constellation, "]
 
-def info_to_tweet(sightings, user_name_len):
+def tonightssky_info_to_tweet(sightings, user_name_len):
     # expects a list of dicts
     template = TEMPLATES[random.randrange(len(TEMPLATES))]
     result = ""
@@ -31,3 +31,46 @@ def info_to_tweet(sightings, user_name_len):
         else:
             sightings.pop(len(sightings) - 1)
     return result
+
+
+def satellite_info_to_tweet(satellites, user_name_len):
+    """
+    eg: "-1.9 (very bright): The <ISS> starts rising
+    <'09:13:19 pm'>, but best seen <'09:15:43pm'>.
+    Look <WNW>, <26> deg above ground!
+    """
+    satellites_by_magnitude = sorted(satellites, key=lambda k: k['magnitude'])
+    best_satellite = satellites_by_magnitude[0]
+
+    #intro = "You're lucky! " if 'bright' in best_satellite['magnitude'] else None
+
+    string_template = (
+        "{magnitude}: The {satellite} starts rising "
+        "{rise_time}, but it's best seen at {best_time}. "
+        "Look {direction} {degrees}deg above ground!"
+    ).format(
+        magnitude=best_satellite['magnitude'],
+        satellite=best_satellite['name'],
+        rise_time=best_satellite['rise_time'],
+        best_time=best_satellite['best_time'],
+        direction=best_satellite['direction'],
+        degrees=best_satellite['max_elevation']
+    )
+
+    string_template_short = (
+        "{magnitude}: {satellite} is best seen at {best_time}.  "
+        "Look {direction}!"
+    ).format(
+        magnitude=best_satellite['magnitude'],
+        satellite=best_satellite['name'],
+        best_time=best_satellite['best_time'],
+        direction=best_satellite['direction'],
+    )
+
+    if len(string_template) + user_name_len <= 140:
+        return string_template
+    elif len(string_template_short) + user_name_len <= 140:
+        return string_template_short
+    else: 
+        return -1
+    
