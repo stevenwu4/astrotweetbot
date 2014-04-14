@@ -21,7 +21,7 @@ MESSAGES = ["Check out this cool photo I found on the Internet",
             "This photo I found looks great!",
             "I found this and stared at it for a long time (with my robot eye)",
             "Amazing sight",
-            "Who needs to go outside when photos like is on the Internet",
+            "Who needs to go outside when photos like this is on the Internet",
             "Thanks to reddit, I discovered this",
             "I am a bot and I was stunned by this amazing scenery",
             "Approved by the Reddit public"]
