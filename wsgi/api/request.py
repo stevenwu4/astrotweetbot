@@ -34,8 +34,8 @@ class RequestWeb(object):
                 'long': args['long']}
             
             print payload
-           # message =  parser.get_tonights_sky_tweet(payload) 
-           # self.tb.tweet_at(message, tar)
+            message =  parser.get_tonights_sky_tweet(payload) 
+            self.tb.tweet_at(message, tar)
             return self._return_msg('success', 'tweeted the sky')
         
         elif call == "satellite":
