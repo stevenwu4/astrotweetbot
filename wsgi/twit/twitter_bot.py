@@ -130,43 +130,35 @@ class TwitterBot(object):
 
 
         if payload['lat'] == None or payload['long'] == None or payload['when'] == None or payload['length'] == None:
-            print 'invalid'
+            requests.get('http://bot-astrotweet.rhcloud/api/v1/error')
             return
 
         name = res.user.screen_name
         url = ('http://bot-astrotweet.rhcloud.com/api/v1/sky?respond_to=' + 
-        name + "&lat=" + str(payload['lat']) +
-        "&long=" + str(payload['long']) + 
-        "&when=" + str(payload['when']) +
-        "&length=" + str(payload['length'])+
-        "&difficulty=" + str(payload['difficulty']) +
-        "&features=" + str(payload['features']))
+            name + "&lat=" + str(payload['lat']) +
+            "&long=" + str(payload['long']) + 
+            "&when=" + str(payload['when']) +
+            "&length=" + str(payload['length'])+
+            "&difficulty=" + str(payload['difficulty']) +
+            "&features=" + str(payload['features']))
         print url
         if (requests.get(url)):
             print 'sent tweet'
 
     def send_payload_satellite(self, res):
-        payload = {'lat':None, 'long':None, 'postal_code':None}
-        pos = self.get_position(res)
-        payload['lat'] = pos['lat']
-        payload['long'] = pos['long']
-        payload['postal_code'] = res.text.split(',')[-1].encode().strip()
+        pc = res.text.split(',')[-1].encode().strip()
        
         name = res.user.screen_name
-        url = ('http://bot-astrotweet.rhcloud.com/api/v1/satellite?respond_to=' + name + '&lat=' + str(payload['lat']) + "&long=" + str(payload['long']) + "&postal_code=" + payload['postal_code'])
+        url = ('http://bot-astrotweet.rhcloud.com/api/v1/satellite?respond_to=' + name + "&postal_code=" + pc)
         print url
-#        if (requests.get(url)):
-#            print 'sent tweet'
+        if (requests.get(url)):
+            print 'sent tweet'
         print payload
 
     def tweet_at(self, mssg, user_scr):
         # Tweets at a specific user
-        res = "@" + user_scr + " " + mssg + " " + time.strftime('%h/%d/ %H:%M')
-        try:
-            self.api.PostUpdate(res)
-        except TwitterError:
-            print 'TwitterError'
-            pass
+        res = "@" + user_scr + " " + mssg
+        self.api.PostUpdate(res)
 
     def test(self):
         self.get_feed()

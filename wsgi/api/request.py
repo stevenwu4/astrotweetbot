@@ -33,15 +33,23 @@ class RequestWeb(object):
                 'lat': args['lat'],
                 'long': args['long']}
             
-            message =  parser.get_tonights_sky_tweet(payload) 
-            self.tb.tweet_at(message, tar)
+            print payload
+           # message =  parser.get_tonights_sky_tweet(payload) 
+           # self.tb.tweet_at(message, tar)
             return self._return_msg('success', 'tweeted the sky')
         
-        #TODO: make satellite parser
         elif call == "satellite":
-            # TODO: call the satellite scraper
-            self.tb.tweet_at('Hey, you requested satellite', 
-                user_scr=tar)
+            payload = {
+                'user': args['respond_to'],
+                'zip_code': args['postal_code']
+            }
+            message = parser.get_satellite_tweet(payload)
+            self.tb.tweet_at(message, tar)
             return self._return_msg('success', 'tweeted the satellite')
+        
+        elif call == "error":
+            return self._return_msg('fail', 'incomplete query')
+            print 'Incomplete query'
+        
         else:
             return self._return_msg('fail', 'unspecified query')
