@@ -10,10 +10,10 @@ SUB_REDDITS = ["skyporn", "spaceporn", "earthporn"]
 USED_LINK_LOG = "url_logs.log"
 SUPPORTED_FORMAT = ["png", "jpg"]
 
-# CONSUMER_KEY = os.getenv('CONSUMER_KEY')
-# CONSUMER_SECRET = os.getenv('CONSUMER_SECRET')
-# ACCESS_TOKEN_KEY = os.getenv('ACCESS_TOKEN_KEY')
-# ACCESS_TOKEN_SECRET = os.getenv('ACCESS_TOKEN_SECRET')
+CONSUMER_KEY = os.getenv('CONSUMER_KEY')
+CONSUMER_SECRET = os.getenv('CONSUMER_SECRET')
+ACCESS_TOKEN_KEY = os.getenv('ACCESS_TOKEN_KEY')
+ACCESS_TOKEN_SECRET = os.getenv('ACCESS_TOKEN_SECRET')
 
 MESSAGES = ["Check out this cool photo I found on the Internet",
             "I was just reading Reddit and I found this",
@@ -74,10 +74,8 @@ def main():
             # make the file if it doesn't exist
             open(USED_LINK_LOG, 'w').close()
 
-    # twitter = Twython(CONSUMER_KEY, CONSUMER_SECRET,
-    #                   ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
-    twitter = Twython("Q31P3Ivl77E6D1IwILvTBMqgu", "Yf9DKWUCHQc8JVVOW7LxE9Sjgtyo9v3B3Mi1Kr4szI6sX8amSw",
-                      "2440097802-HXGhzx9NEcqDNIGbTD87DckO4UaYTudOjufR3xN", "lQs3Xri3I36jcNbVFKv0CkDMI8aYoYysUYG1ANtGYkxPQ")
+    twitter = Twython(CONSUMER_KEY, CONSUMER_SECRET,
+                      ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
     for c in range(twitter_retries):
         try:
             twitter_photo_size_limit = _get_size(twitter)
@@ -106,8 +104,8 @@ def main():
             # print "start it"
             for c in range(twitter_retries):
                 try:
-                    twitter.update_status(status=random.choice(MESSAGES)+" "+l)
-                    # twitter.update_status_with_media(media=encoded, status=random.choice(MESSAGES))
+                    #twitter.update_status(status=random.choice(MESSAGES)+" "+l)
+                    twitter.update_status_with_media(media=open(file_name,'r'), status=random.choice(MESSAGES))
                     print ("photo successfully tweeted")
                     return 0
                 except TwythonRateLimitError as e:
