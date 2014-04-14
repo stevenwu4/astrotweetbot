@@ -1,0 +1,2 @@
+#!/bin/bash
+PYTHONPATH=. python ${OPENSHIFT_REPO_DIR}reddit_bot/reddit_photo_bot.py
