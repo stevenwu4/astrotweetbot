@@ -125,9 +125,6 @@ class TwitterBot(object):
         
         if len(queries) > 3:
             payload['difficulty'] = queries[3].strip()
-        if len(queries) > 4:
-            payload['features'] = queries[4].strip()
-
 
         if payload['lat'] == None or payload['long'] == None or payload['when'] == None or payload['length'] == None:
             requests.get('http://bot-astrotweet.rhcloud/api/v1/error')
@@ -153,7 +150,6 @@ class TwitterBot(object):
         print url
         if (requests.get(url)):
             print 'sent tweet'
-        print payload
 
     def tweet_at(self, mssg, user_scr):
         # Tweets at a specific user
