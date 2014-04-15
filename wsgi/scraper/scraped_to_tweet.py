@@ -7,6 +7,9 @@ TEMPLATES = ["You could see %s in %s, ",
              "You might find %s in %s constellation, "]
 
 def tonightssky_info_to_tweet(sightings, user_name_len):
+    if len(sightings) == 0:
+        return "We could not find anything for you :("
+
     # expects a list of dicts
     template = TEMPLATES[random.randrange(len(TEMPLATES))]
     result = ""
