@@ -29,7 +29,7 @@ class DownloadFailedError(Exception):
 
 def _construct_rest_url_flickr(api_name, args):
     url_prefix = "https://api.flickr.com/services/rest/?method="
-    api_key = "d01f1048dbb3b9159e6815962b2abd9b"
+    api_key = os.getenv('FLICKER_API')
     result = url_prefix + api_name + "&"
     result += "format=json&"
     for k, v in args.iteritems():
