@@ -8,10 +8,25 @@
 <h3>So what's this about anyway</h3>
 <strong>How To Use</strong>
 <br>
-<p>This is a project that will enable you to find out what to look for when you are out on a date and you need to impress your "friend."  We mean, it's a twitter account that tells you astronomical events in your neighbourhood.  If you want to request info about planetary events or satellites tweet @astro_tweet_bot in the form:</p>
-<p>@astro_tweet_bot, sky, [start time]+[length time], ([number 1-6], [list of events])</p>
+<p>This is a project that will enable you to find out what to look for when you are out on a date and you need to impress your "friend."  We mean, it's a twitter account that tells you astronomical events in your neighbourhood.  If you want to request info about planetary events, tweet @astro_tweet_bot in the form:</p>
+<p>@astro_tweet_bot, sky, [start time]+[length time], ([number 1-6])</p>
+<p>where:</p>
+<p>[start time] is a number 0-24 indicating the hour at which you want to begin viewing,</p>
+<p>[length time] is the number of hours you are viewing for,</p>
+<p>[number 1-6] is the level of difficulty of the event you are viewing (1 is visible to the naked eye, 2 is visible with binoculars, 3 is visible with a small telescope, etc)</p>
+<p>The [number 1-6] is optional. If you don't specify it, astro_tweet_bot
+assumes you want to see everything :)</p>
+<p>for example, if you wanted to start viewing at 8:00PM for 3 hours:</p>
+<p>@astro_tweet_bot, sky, 20+3</p>
+<p>or, if you wanted to start viewing at 8:00PM for 3 hours but you don't have any equipment:</p>
+<p>@astro_tweet_bot, sky, 20+3, 1</p>
+<br>
+<p>or, if you want to know about satellites flying over your head today (so far, working for US and Canada only), tweet @astro_tweet_bot in the form:</p>
 <p>@astro_tweet_bot, satellite, [postal code]</p>
-<p>We should get back to you in about a minute :)</p>
+<p>Canada example: @astro_tweet_bot, satellite, M4N1V1</p>
+<p>USA example: @astro_tweet_bot, satellite, 55441</p>
+<br>
+<p>For either one, we should get back to you in about a minute :)</p>
 <br>
 <strong>The competiton</strong>
 <p>This project was attempted as part of <a href="https://2014.spaceappschallenge.org/">SpaceApps Challenge 2014</a>.  More specifically the <a href="https://2014.spaceappschallenge.org/challenge/alert-alert/">Alert-Alert</a> challenge.</p>
