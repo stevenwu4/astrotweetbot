@@ -4,6 +4,7 @@ from twython import Twython, TwythonRateLimitError
 from urllib2 import Request, urlopen, URLError, HTTPError
 import urllib
 import base64
+import os
 from PIL import Image
 
 SUB_REDDITS = ["skyporn", "spaceporn", "earthporn"]
@@ -35,9 +36,10 @@ def _download_img(url):
     retry_limit = 3
     retry_delay = 5  # seconds
     file_name = 'image'
+    path_to_save = os.path.join(os.path.dirname(os.path.realpath(__file__)), file_name)
     for c in range(retry_limit):
         try:
-            download = urllib.urlretrieve(url, file_name)
+            download = urllib.urlretrieve(url, path_to_save)
             return download[0]
         except URLError as e:
             print("Image download failed URL:", url, "Reason:", e.reason)
@@ -105,7 +107,8 @@ def main():
             for c in range(twitter_retries):
                 try:
                     #twitter.update_status(status=random.choice(MESSAGES)+" "+l)
-                    twitter.update_status_with_media(media=open(file_name,'r'), status=random.choice(MESSAGES))
+                    with open(file_name, 'r') as image_file:
+                        twitter.update_status_with_media(media=image_file, status=random.choice(MESSAGES))
                     print ("photo successfully tweeted")
                     return 0
                 except TwythonRateLimitError as e:

@@ -58,9 +58,10 @@ def _download_img(url):
     retry_limit = 3
     retry_delay = 5  # seconds
     file_name = 'today.jpg'
+    path_to_save = os.path.join(os.path.dirname(os.path.realpath(__file__)), file_name)
     for c in range(retry_limit):
         try:
-            download = urllib.urlretrieve(url, file_name)
+            download = urllib.urlretrieve(url, path_to_save)
             if "image/jpeg" in str(download[1]):
                 return file_name
             else:
