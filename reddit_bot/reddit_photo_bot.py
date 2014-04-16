@@ -7,8 +7,10 @@ import base64
 import os
 from PIL import Image
 
+repo = os.getenv('OPENSHIFT_REPO_DIR')
+
 SUB_REDDITS = ["skyporn", "spaceporn", "earthporn"]
-USED_LINK_LOG = "url_logs.log"
+USED_LINK_LOG = repo+"reddit_bot/url_logs.log"
 SUPPORTED_FORMAT = ["png", "jpg"]
 
 CONSUMER_KEY = os.getenv('CONSUMER_KEY')
