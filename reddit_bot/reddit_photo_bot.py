@@ -52,7 +52,7 @@ def _download_img(url):
 # throws TwythonRateLimitError
 def _b64_encode(file_name):  
     #file_name is in the same directory
-    with open(file_name, 'r') as f:
+    with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), file_name), 'r') as f:
         image = f.read()
     return base64.b64encode(image)
 
