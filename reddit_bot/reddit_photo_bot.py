@@ -97,7 +97,7 @@ def main():
                                   .get_hot(limit=reddit_post_limit)
     links = [x.url for x in submissions]
     for l in links:
-        if l in used_links:
+        if l.strip() in used_links:
             continue
         if l[(len(l) - 3):].lower() not in SUPPORTED_FORMAT:
             continue
